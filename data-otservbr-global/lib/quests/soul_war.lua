@@ -51,12 +51,13 @@ SoulWarQuest = {
 		"Sorcerer's Apparition",
 		"Turbulent Elemental",
 		"Vibrant Phantom.",
+	},
+	bagYouDesireBosses = {
 		"Goshnar's Cruelty",
 		"Goshnar's Spite",
 		"Goshnar's Malice",
 		"Goshnar's Hatred",
 		"Goshnar's Greed",
-		"Goshnar's Megalomania",
 	},
 
 	-- Goshnar's Cruelty pulsating energy monsters
@@ -116,108 +117,6 @@ SoulWarQuest = {
 		{ from = Position(33856, 31884, 5), to = Position(33857, 31865, 6), access = "third-floor-access", count = 70 },
 	},
 
-	claustrophobicInfernoRaids = {
-		[1] = {
-			zoneArea = {
-				{ x = 33985, y = 31053, z = 9 },
-				{ x = 34045, y = 31077, z = 9 },
-			},
-			sandTimerPositions = {
-				{ x = 34012, y = 31049, z = 9 },
-				{ x = 34013, y = 31049, z = 9 },
-				{ x = 34014, y = 31049, z = 9 },
-				{ x = 34015, y = 31049, z = 9 },
-			},
-			zone = Zone("raid.first-claustrophobic-inferno"),
-			spawns = {
-				Position(33991, 31064, 9),
-				Position(34034, 31060, 9),
-				Position(34028, 31067, 9),
-				Position(34020, 31067, 9),
-				Position(34008, 31067, 9),
-				Position(34001, 31059, 9),
-				Position(33992, 31069, 9),
-				Position(34002, 31072, 9),
-				Position(34013, 31074, 9),
-				Position(33998, 31060, 9),
-				Position(34039, 31065, 9),
-				Position(34032, 31072, 9),
-			},
-			exitPosition = { x = 34009, y = 31083, z = 9 },
-			getZone = function()
-				return SoulWarQuest.claustrophobicInfernoRaids[1].zone
-			end,
-		},
-		[2] = {
-			zoneArea = {
-				{ x = 33988, y = 31042, z = 10 },
-				{ x = 34043, y = 31068, z = 10 },
-			},
-			sandTimerPositions = {
-				{ x = 34012, y = 31075, z = 10 },
-				{ x = 34011, y = 31075, z = 10 },
-				{ x = 34010, y = 31075, z = 10 },
-			},
-			zone = Zone("raid.second-claustrophobic-inferno"),
-			spawns = {
-				Position(33999, 31046, 10),
-				Position(34011, 31047, 10),
-				Position(34015, 31052, 10),
-				Position(34021, 31044, 10),
-				Position(34029, 31054, 10),
-				Position(34037, 31052, 10),
-				Position(34037, 31060, 10),
-				Position(34023, 31062, 10),
-				Position(34012, 31061, 10),
-				Position(33998, 31061, 10),
-				Position(34005, 31052, 10),
-			},
-			exitPosition = { x = 34011, y = 31028, z = 10 },
-			getZone = function()
-				return SoulWarQuest.claustrophobicInfernoRaids[2].zone
-			end,
-		},
-		[3] = {
-			zoneArea = {
-				{ x = 33987, y = 31043, z = 11 },
-				{ x = 34044, y = 31076, z = 11 },
-			},
-			sandTimerPositions = {
-				{ x = 34009, y = 31036, z = 11 },
-				{ x = 34010, y = 31036, z = 11 },
-				{ x = 34011, y = 31036, z = 11 },
-				{ x = 34012, y = 31036, z = 11 },
-				{ x = 34013, y = 31036, z = 11 },
-				{ x = 34014, y = 31036, z = 11 },
-			},
-			zone = Zone("raid.third-claustrophobic-inferno"),
-			spawns = {
-				Position(34005, 31049, 11),
-				Position(33999, 31051, 11),
-				Position(33995, 31055, 11),
-				Position(33999, 31068, 11),
-				Position(34016, 31068, 11),
-				Position(34030, 31070, 11),
-				Position(34038, 31066, 11),
-				Position(34038, 31051, 11),
-				Position(34033, 31051, 11),
-				Position(34025, 31049, 11),
-				Position(34013, 31058, 11),
-				Position(34021, 31059, 11),
-				Position(34027, 31063, 11),
-				Position(34007, 31063, 11),
-				Position(34004, 31059, 11),
-			},
-			exitPosition = { x = 34014, y = 31085, z = 11 },
-			getZone = function()
-				return SoulWarQuest.claustrophobicInfernoRaids[3].zone
-			end,
-		},
-		spawnTime = 10, -- seconds
-		suriviveTime = 2 * 60, -- 2 minutes
-		timeToKick = 5, -- seconds
-	},
-
 	areaZones = {
 		monsters = {
 			["zone.claustrophobic-inferno"] = "Brachiodemon",
@@ -233,7 +132,7 @@ SoulWarQuest = {
 			["boss.goshnar's-megalomania-purple"] = "Dreadful Harvester",
 		},
 
-		claustrophobicInferno = Zone("zone.claustrophobic-inferno"),
+		caustrophobicInferno = Zone("zone.claustrophobic-inferno"),
 		mirroredNightmare = Zone("zone.mirrored-nightmare"),
 		ebbAndFlow = Zone("zone.ebb-and-flow"),
 		furiousCrater = Zone("zone.furious-crater"),
@@ -781,52 +680,11 @@ SoulWarQuest = {
 	},
 }
 
-function RegisterSoulWarBossesLevers()
-	-- Register levers
-	local goshnarsMaliceLever = BossLever(SoulWarQuest.levers.goshnarsMalice)
-	goshnarsMaliceLever:position(SoulWarQuest.levers.goshnarsMalicePosition)
-	goshnarsMaliceLever:register()
-	logger.debug("Registering soul war boss lever zone: {}", goshnarsMaliceLever:getZone():getName())
-
-	local goshnarsSpiteLever = BossLever(SoulWarQuest.levers.goshnarsSpite)
-	goshnarsSpiteLever:position(SoulWarQuest.levers.goshnarsSpitePosition)
-	goshnarsSpiteLever:register()
-	logger.debug("Registering soul war boss lever zone: {}", goshnarsSpiteLever:getZone():getName())
-
-	local goshnarsGreedLever = BossLever(SoulWarQuest.levers.goshnarsGreed)
-	goshnarsGreedLever:position(SoulWarQuest.levers.goshnarsGreedPosition)
-	goshnarsGreedLever:register()
-	logger.debug("Registering soul war boss lever zone: {}", goshnarsGreedLever:getZone():getName())
-
-	local goshnarsHatredLever = BossLever(SoulWarQuest.levers.goshnarsHatred)
-	goshnarsHatredLever:position(SoulWarQuest.levers.goshnarsHatredPosition)
-	goshnarsHatredLever:register()
-	logger.debug("Registering soul war boss lever zone: {}", goshnarsHatredLever:getZone():getName())
-
-	local goshnarsCrueltyLever = BossLever(SoulWarQuest.levers.goshnarsCruelty)
-	goshnarsCrueltyLever:position(SoulWarQuest.levers.goshnarsCrueltyPosition)
-	goshnarsCrueltyLever:register()
-	logger.debug("Registering soul war boss lever zone: {}", goshnarsCrueltyLever:getZone():getName())
-
-	local goshnarsMegalomaniaLever = BossLever(SoulWarQuest.levers.goshnarsMegalomania)
-	goshnarsMegalomaniaLever:position(SoulWarQuest.levers.goshnarsMegalomaniaPosition)
-	goshnarsMegalomaniaLever:register()
-	logger.debug("Registering soul war boss lever zone: {}", goshnarsMegalomaniaLever:getZone():getName())
-end
-
 -- Initialize ebb and flow zone area
 SoulWarQuest.ebbAndFlow.zone:addArea({ x = 33869, y = 30991, z = 8 }, { x = 33964, y = 31147, z = 9 })
 
--- Initialize claustrophobic inferno raid zones and add remove destination
-
-for _, raid in ipairs(SoulWarQuest.claustrophobicInfernoRaids) do
-	local zone = raid.getZone()
-	zone:addArea(raid.zoneArea[1], raid.zoneArea[2])
-	zone:setRemoveDestination(raid.exitPosition)
-end
-
 -- Initialize bosses access for taint check
-SoulWarQuest.areaZones.claustrophobicInferno:addArea({ x = 33982, y = 30981, z = 9 }, { x = 34051, y = 31110, z = 11 })
+SoulWarQuest.areaZones.caustrophobicInferno:addArea({ x = 33982, y = 30981, z = 9 }, { x = 34051, y = 31110, z = 11 })
 
 SoulWarQuest.areaZones.ebbAndFlow:addArea({ x = 33873, y = 30994, z = 8 }, { x = 33968, y = 31150, z = 9 })
 
@@ -835,17 +693,6 @@ SoulWarQuest.areaZones.furiousCrater:addArea({ x = 33814, y = 31819, z = 3 }, { 
 SoulWarQuest.areaZones.rottenWasteland:addArea({ x = 33980, y = 30986, z = 11 }, { x = 33901, y = 31105, z = 12 })
 
 SoulWarQuest.areaZones.mirroredNightmare:addArea({ x = 33877, y = 31164, z = 9 }, { x = 33991, y = 31241, z = 13 })
-
--- Initialize safe areas (should not spawn monster, teleport, take damage from taint, etc)
-SoulWarQuest.areaZones.claustrophobicInferno:subtractArea({ x = 34002, y = 31008, z = 9 }, { x = 34019, y = 31019, z = 9 })
-
-SoulWarQuest.areaZones.ebbAndFlow:subtractArea({ x = 33887, y = 31015, z = 8 }, { x = 33920, y = 31024, z = 8 })
-
-SoulWarQuest.areaZones.furiousCrater:subtractArea({ x = 33854, y = 31828, z = 3 }, { x = 33869, y = 31834, z = 3 })
-
-SoulWarQuest.areaZones.rottenWasteland:subtractArea({ x = 33967, y = 31037, z = 11 }, { x = 33977, y = 31051, z = 11 })
-
-SoulWarQuest.areaZones.mirroredNightmare:subtractArea({ x = 33884, y = 31181, z = 10 }, { x = 33892, y = 31198, z = 10 })
 
 SoulCagePosition = Position(33709, 31596, 14)
 TaintDurationSeconds = 14 * 24 * 60 * 60 -- 14 days
@@ -1067,45 +914,33 @@ end
 
 function Monster:generateBagYouDesireLoot(player)
 	local playerTaintLevel = player:getTaintLevel()
-	if not playerTaintLevel or playerTaintLevel == 0 then
+	if not playerTaintLevel then
 		return {}
 	end
 
 	local monsterName = self:getName()
-	local isMonsterValid = table.contains(SoulWarQuest.bagYouDesireMonsters, monsterName)
+	local isMonsterValid = false
+	for _, monster in ipairs(SoulWarQuest.bagYouDesireMonsters) do
+		if monsterName == monster then
+			isMonsterValid = true
+			break
+		end
+	end
+
 	if not isMonsterValid then
 		return {}
 	end
 
+	-- Calculates the chances based on the number of taints
+	local totalChance = SoulWarQuest.baseBagYouDesireChance + (playerTaintLevel * SoulWarQuest.bagYouDesireChancePerTaint)
+	logger.trace("Player {} killed {} and has {} taints, loot chance {}", player:getName(), monsterName, playerTaintLevel, totalChance)
+	-- Generate loot
 	local loot = {}
-	local totalChance = SoulWarQuest.baseBagYouDesireChance
-	local soulWarQuest = player:soulWarQuestKV()
-	local megalomaniaKills = soulWarQuest:scoped("megalomania-kills"):get("count") or 0
-
-	if monsterName == "Goshnar's Megalomania" then
-		-- Special handling for Goshnar's Megalomania
-		totalChance = totalChance + megalomaniaKills * SoulWarQuest.bagYouDesireChancePerTaint
-	else
-		-- General handling for other monsters (bosses and non-bosses)
-		totalChance = totalChance + (playerTaintLevel * SoulWarQuest.bagYouDesireChancePerTaint)
-	end
-
-	logger.trace("Player {} killed {} with {} taints, loot chance {}", player:getName(), monsterName, playerTaintLevel, totalChance)
-
 	if math.random(1, 100) <= totalChance then
 		local itemType = ItemType(SoulWarQuest.bagYouDesireItemId)
 		if itemType then
 			loot[itemType:getId()] = { count = 1 }
 			logger.debug("Player {} killed {} and got a bag you desire with drop chance {}", player:getName(), monsterName, totalChance)
-			if monsterName == "Goshnar's Megalomania" then
-				-- Reset kill count on successful drop
-				soulWarQuest:scoped("megalomania-kills"):set("count", 0)
-			end
-		end
-	else
-		if monsterName == "Goshnar's Megalomania" then
-			-- Increment kill count for unsuccessful attempts
-			soulWarQuest:scoped("megalomania-kills"):set("count", megalomaniaKills + 1)
 		end
 	end
 
@@ -1207,7 +1042,7 @@ function Monster:tryTeleportToPlayer(sayMessage)
 	for i, spectator in ipairs(spectators) do
 		if spectator:isPlayer() then
 			local player = spectator:getPlayer()
-			if player:getTaintNameByNumber(1, true) and player:getSoulWarZoneMonster() ~= nil then
+			if player:getTaintNameByNumber(1, true) then
 				local distance = self:getPosition():getDistance(player:getPosition())
 				if distance > maxDistance then
 					maxDistance = distance
