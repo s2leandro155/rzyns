@@ -14,15 +14,13 @@ SaveManager &SaveManager::getInstance() {
 void SaveManager::saveAll() {
 	Benchmark bm_saveAll;
 	logger.info("Saving server...");
-	const auto players = game.getPlayers();
 
-	for (const auto &[_, player] : players) {
+	for (const auto &[_, player] : game.getPlayers()) {
 		player->loginPosition = player->getPosition();
 		doSavePlayer(player);
 	}
 
-	auto guilds = game.getGuilds();
-	for (const auto &[_, guild] : guilds) {
+	for (const auto &[_, guild] : game.getGuilds()) {
 		saveGuild(guild);
 	}
 
@@ -66,20 +64,20 @@ void SaveManager::schedulePlayer(std::weak_ptr<Player> playerPtr) {
 		return;
 	}
 
-	logger.debug("Scheduling player {} for saving.", playerToSave->getName());
+	logger.debug("Scheduling player {} for asynchronous saving.", playerToSave->getName());
 	auto scheduledAt = std::chrono::steady_clock::now();
 	m_playerMap[playerToSave->getGUID()] = scheduledAt;
-	threadPool.detach_task([this, playerPtr, scheduledAt]() {
-		auto player = playerPtr.lock();
-		if (!player) {
+
+	threadPool.detach_task([this, scheduledAt, playerToSave]() {
+		if (!playerToSave) {
 			logger.debug("Skipping save for player because player is no longer online.");
 			return;
 		}
-		if (m_playerMap[player->getGUID()] != scheduledAt) {
+		if (m_playerMap[playerToSave->getGUID()] != scheduledAt) {
 			logger.warn("Skipping save for player because another save has been scheduled.");
 			return;
 		}
-		doSavePlayer(player);
+		doSavePlayer(playerToSave);
 	});
 }
 
@@ -91,19 +89,23 @@ bool SaveManager::doSavePlayer(std::shared_ptr<Player> player) {
 
 	Benchmark bm_savePlayer;
 	Player::PlayerLock lock(player);
-	m_playerMap.erase(player->getGUID());
+
 	if (g_game().getGameState() == GAME_STATE_NORMAL) {
 		logger.debug("Saving player {}.", player->getName());
+		bool saveSuccess = IOLoginData::savePlayer(player);
+		if (saveSuccess) {
+			m_playerMap.erase(player->getGUID()); // Apenas remove se o salvamento for bem-sucedido
+			logger.debug("Player {} saved successfully.", player->getName());
+		} else {
+			logger.error("Failed to save player {}.", player->getName());
+		}
+		auto duration = bm_savePlayer.duration();
+		logger.debug("Saving player {} took {} milliseconds.", player->getName(), duration);
+		return saveSuccess;
+	} else {
+		logger.debug("Game state is not normal; skipping save.");
+		return false;
 	}
-
-	bool saveSuccess = IOLoginData::savePlayer(player);
-	if (!saveSuccess) {
-		logger.error("Failed to save player {}.", player->getName());
-	}
-
-	auto duration = bm_savePlayer.duration();
-	logger.debug("Saving player {} took {} milliseconds.", player->getName(), duration);
-	return saveSuccess;
 }
 
 bool SaveManager::savePlayer(std::shared_ptr<Player> player) {

@@ -106,22 +106,19 @@ public:
 	class PlayerLock {
 	public:
 		explicit PlayerLock(const std::shared_ptr<Player> &p) :
-			player(p) {
-			player->mutex.lock();
+			player(p), lock(player->mutex) {
 		}
 
 		PlayerLock(const PlayerLock &) = delete;
-
-		~PlayerLock() {
-			player->mutex.unlock();
-		}
+		PlayerLock &operator=(const PlayerLock &) = delete;
 
 	private:
-		const std::shared_ptr<Player> &player;
+		std::shared_ptr<Player> player;
+		std::scoped_lock<std::mutex> lock;
 	};
 
 	explicit Player(ProtocolGame_ptr p);
-	~Player();
+	~Player() override;
 
 	// non-copyable
 	Player(const Player &) = delete;
