@@ -33,9 +33,9 @@ bool PlayerAchievement::add(uint16_t id, bool message /* = true*/, uint32_t time
 	}
 
 	addPoints(achievement.points);
-	int toSaveTimeStamp = timestamp != 0 ? timestamp : (OTSYS_TIME() / 1000);
-	getUnlockedKV()->set(achievement.name, toSaveTimeStamp);
-	m_achievementsUnlocked.push_back({ achievement.id, toSaveTimeStamp });
+	auto toSaveTimeStamp = timestamp != 0 ? timestamp : (OTSYS_TIME() / 1000);
+	getUnlockedKV()->set(achievement.name, static_cast<int>(toSaveTimeStamp));
+	m_achievementsUnlocked.emplace_back(achievement.id, toSaveTimeStamp);
 	m_achievementsUnlocked.shrink_to_fit();
 	return true;
 }
@@ -80,17 +80,35 @@ bool PlayerAchievement::isUnlocked(uint16_t id) const {
 }
 
 uint16_t PlayerAchievement::getPoints() const {
-	return m_player.kv()->scoped("achievements")->get("points")->getNumber();
+	auto scopedAchievements = m_player.kv()->scoped("achievements")->get("points");
+
+	if (!scopedAchievements || !scopedAchievements.has_value()) {
+		return 0;
+	}
+
+	return static_cast<uint16_t>(scopedAchievements->getNumber());
 }
 
 void PlayerAchievement::addPoints(uint16_t toAddPoints) {
 	auto oldPoints = getPoints();
-	m_player.kv()->scoped("achievements")->set("points", oldPoints + toAddPoints);
+	auto scopedAchievements = m_player.kv()->scoped("achievements");
+
+	if (!scopedAchievements) {
+		return;
+	}
+
+	scopedAchievements->set("points", oldPoints + toAddPoints);
 }
 
 void PlayerAchievement::removePoints(uint16_t points) {
 	auto oldPoints = getPoints();
-	m_player.kv()->scoped("achievements")->set("points", oldPoints - std::min<uint16_t>(oldPoints, points));
+	auto scopedAchievements = m_player.kv()->scoped("achievements");
+
+	if (!scopedAchievements) {
+		return;
+	}
+
+	scopedAchievements->set("points", oldPoints - std::min<uint16_t>(oldPoints, points));
 }
 
 std::vector<std::pair<uint16_t, uint32_t>> PlayerAchievement::getUnlockedAchievements() const {
@@ -109,7 +127,7 @@ void PlayerAchievement::loadUnlockedAchievements() {
 
 		g_logger().debug("[{}] - Achievement {} found for player {}.", __FUNCTION__, achievementName, m_player.getName());
 
-		m_achievementsUnlocked.push_back({ achievement.id, getUnlockedKV()->get(achievementName)->getNumber() });
+		m_achievementsUnlocked.emplace_back(achievement.id, getUnlockedKV()->get(achievementName)->getNumber());
 	}
 }
 
@@ -126,7 +144,7 @@ void PlayerAchievement::sendUnlockedSecretAchievements() {
 			unlockedSecret++;
 		}
 
-		m_achievementsUnlocked.push_back({ achievement, achievCreatedTime });
+		m_achievementsUnlocked.emplace_back(achievement, achievCreatedTime);
 	}
 
 	m_player.sendCyclopediaCharacterAchievements(unlockedSecret, m_achievementsUnlocked);

@@ -3662,18 +3662,12 @@ void ProtocolGame::sendCyclopediaCharacterRecentDeaths(uint16_t page, uint16_t p
 	msg.addByte(CYCLOPEDIA_CHARACTERINFO_RECENTDEATHS);
 	msg.addByte(0x00);
 
-	uint16_t totalPages = static_cast<uint16_t>(std::ceil(static_cast<double>(entries.size()) / pages));
-	uint16_t currentPage = std::min<uint16_t>(page, totalPages);
-	uint16_t firstObject = (currentPage - 1) * pages;
-	uint16_t finalObject = firstObject + pages;
-
-	msg.add<uint16_t>(currentPage);
-	msg.add<uint16_t>(totalPages);
+	msg.add<uint16_t>(page);
 	msg.add<uint16_t>(pages);
-	for (uint16_t i = firstObject; i < finalObject; i++) {
-		RecentDeathEntry entry = entries[i];
-		msg.add<uint32_t>(entry.timestamp);
-		msg.addString(entry.cause, "ProtocolGame::sendCyclopediaCharacterRecentDeaths - entry.cause");
+	msg.add<uint16_t>(entries.size());
+	for (const RecentDeathEntry &entries : entries) {
+		msg.add<uint32_t>(entries.timestamp);
+		msg.addString(entries.cause, "ProtocolGame::sendCyclopediaCharacterRecentDeaths - entry.cause");
 	}
 	writeToOutputBuffer(msg);
 }

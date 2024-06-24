@@ -59,6 +59,20 @@
       }
     },
     {
+      "name": "windows-debug-asan",
+      "inherits": "windows-release",
+      "displayName": "Windows - Debug + ASAN",
+      "description": "Debug Mode with ASAN",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "DEBUG_LOG": "ON",
+        "ASAN_ENABLED": "ON",
+        "BUILD_STATIC_LIBRARY": "OFF",
+        "SPEED_UP_BUILD_UNITY": "OFF",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
+      }
+    },
+    {
       "name": "linux-release",
       "inherits": "base",
       "displayName": "Linux - Release",
@@ -122,6 +136,10 @@
     {
       "name": "windows-Xdebug",
       "configurePreset": "windows-debug"
+    },
+    {
+      "name": "windows-Xdebug-asan",
+      "configurePreset": "windows-debug-asan"
     }
   ]
 }
