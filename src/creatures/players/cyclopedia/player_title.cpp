@@ -50,8 +50,8 @@ bool PlayerTitle::manage(bool canAdd, uint8_t id, uint32_t timestamp /* = 0*/) {
 		return false;
 	}
 
-	int toSaveTimeStamp = timestamp != 0 ? timestamp : (OTSYS_TIME() / 1000);
-	getUnlockedKV()->set(title.m_maleName, toSaveTimeStamp);
+	auto toSaveTimeStamp = timestamp != 0 ? timestamp : (OTSYS_TIME() / 1000);
+	getUnlockedKV()->set(title.m_maleName, static_cast<int>(toSaveTimeStamp));
 	m_titlesUnlocked.emplace_back(title, toSaveTimeStamp);
 	m_titlesUnlocked.shrink_to_fit();
 	g_logger().debug("[{}] - Added title: {}", __FUNCTION__, title.m_maleName);
@@ -84,11 +84,23 @@ const std::vector<std::pair<Title, uint32_t>> &PlayerTitle::getUnlockedTitles() 
 }
 
 uint8_t PlayerTitle::getCurrentTitle() const {
-	return static_cast<uint8_t>(m_player.kv()->scoped("titles")->get("current-title")->getNumber());
+	auto scopedTitles = m_player.kv()->scoped("titles")->get("current-title");
+
+	if (!scopedTitles || !scopedTitles.has_value()) {
+		return 0;
+	}
+
+	return static_cast<uint8_t>(scopedTitles->getNumber());
 }
 
 void PlayerTitle::setCurrentTitle(uint8_t id) {
-	m_player.kv()->scoped("titles")->set("current-title", id != 0 && isTitleUnlocked(id) ? id : 0);
+	auto scopedTitles = m_player.kv()->scoped("titles");
+
+	if (!scopedTitles) {
+		return;
+	}
+
+	scopedTitles->set("current-title", id != 0 && isTitleUnlocked(id) ? id : 0);
 }
 
 std::string PlayerTitle::getCurrentTitleName() {
@@ -256,6 +268,11 @@ bool PlayerTitle::checkBestiary(const std::string &name, uint16_t race, bool isB
 
 bool PlayerTitle::checkLoginStreak(uint32_t amount) {
 	auto streakKV = m_player.kv()->scoped("daily-reward")->get("streak");
+
+	if (!streakKV || !streakKV.has_value()) {
+		return false;
+	}
+
 	return streakKV && streakKV.has_value() && static_cast<uint8_t>(streakKV->getNumber()) >= amount;
 }
 

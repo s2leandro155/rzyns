@@ -10253,7 +10253,7 @@ bool Game::removeFiendishMonster(uint32_t id, bool create /* = true*/) {
 
 void Game::updateForgeableMonsters() {
 	forgeableMonsters.clear();
-	for (const auto& [monsterId, monster] : monsters) {
+	for (const auto &[monsterId, monster] : monsters) {
 		auto monsterTile = monster->getTile();
 		if (!monsterTile) {
 			continue;

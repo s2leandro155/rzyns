@@ -797,7 +797,7 @@ std::vector<PlayerWheelGem> PlayerWheel::getActiveGems() const {
 	for (auto affinity : magic_enum::enum_values<WheelGemAffinity_t>()) {
 		std::string key(magic_enum::enum_name(affinity));
 		auto uuidKV = gemsKV()->scoped("active")->get(key);
-		if (!uuidKV.has_value()) {
+		if (!uuidKV || !uuidKV.has_value()) {
 			continue;
 		}
 

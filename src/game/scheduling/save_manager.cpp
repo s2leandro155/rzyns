@@ -89,23 +89,20 @@ bool SaveManager::doSavePlayer(std::shared_ptr<Player> player) {
 
 	Benchmark bm_savePlayer;
 	Player::PlayerLock lock(player);
+	m_playerMap.erase(player->getGUID());
 
 	if (g_game().getGameState() == GAME_STATE_NORMAL) {
 		logger.debug("Saving player {}.", player->getName());
-		bool saveSuccess = IOLoginData::savePlayer(player);
-		if (saveSuccess) {
-			m_playerMap.erase(player->getGUID()); // Apenas remove se o salvamento for bem-sucedido
-			logger.debug("Player {} saved successfully.", player->getName());
-		} else {
-			logger.error("Failed to save player {}.", player->getName());
-		}
-		auto duration = bm_savePlayer.duration();
-		logger.debug("Saving player {} took {} milliseconds.", player->getName(), duration);
-		return saveSuccess;
-	} else {
-		logger.debug("Game state is not normal; skipping save.");
-		return false;
 	}
+
+	bool saveSuccess = IOLoginData::savePlayer(player);
+	if (!saveSuccess) {
+		logger.error("Failed to save player {}.", player->getName());
+	}
+
+	auto duration = bm_savePlayer.duration();
+	logger.debug("Saving player {} took {} milliseconds.", player->getName(), duration);
+	return saveSuccess;
 }
 
 bool SaveManager::savePlayer(std::shared_ptr<Player> player) {

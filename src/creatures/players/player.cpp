@@ -5783,9 +5783,14 @@ void Player::sendUnjustifiedPoints() {
 uint8_t Player::getLastMount() const {
 	int32_t value = getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT);
 	if (value > 0) {
-		return value;
+		return static_cast<uint8_t>(value);
 	}
-	return static_cast<uint8_t>(kv()->get("last-mount")->get<int>());
+	auto lastMountOpt = kv()->get("last-mount");
+	if (lastMountOpt && lastMountOpt->get<int>()) {
+		return static_cast<uint8_t>(lastMountOpt->get<int>());
+	}
+
+	return 0;
 }
 
 uint8_t Player::getCurrentMount() const {
