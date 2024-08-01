@@ -128,7 +128,7 @@ public:
 
 	void stopEvent(uint64_t eventId);
 
-	static const auto &context() {
+	const auto &context() {
 		return dispacherContext;
 	}
 
