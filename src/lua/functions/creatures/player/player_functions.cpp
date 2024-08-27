@@ -1722,7 +1722,7 @@ int PlayerFunctions::luaPlayerSetBankBalance(lua_State* L) {
 
 int PlayerFunctions::luaPlayerGetStorageValue(lua_State* L) {
 	// player:getStorageValue(key)
-	const auto player = getUserdataShared<Player>(L, 1);
+	const auto &player = getUserdataShared<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
@@ -3749,7 +3749,7 @@ int PlayerFunctions::luaPlayerSendDoubleSoundEffect(lua_State* L) {
 
 int PlayerFunctions::luaPlayerGetName(lua_State* L) {
 	// player:getName()
-	const auto player = getUserdataShared<Player>(L, 1);
+	const auto &player = getUserdataShared<Player>(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -3762,7 +3762,7 @@ int PlayerFunctions::luaPlayerGetName(lua_State* L) {
 
 int PlayerFunctions::luaPlayerChangeName(lua_State* L) {
 	// player:changeName(newName)
-	const auto player = getUserdataShared<Player>(L, 1);
+	const auto &player = getUserdataShared<Player>(L, 1);
 	if (!player) {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		pushBoolean(L, false);
@@ -3834,7 +3834,7 @@ int PlayerFunctions::luaPlayerAddHazardSystemPoints(lua_State* L) {
 
 int PlayerFunctions::luaPlayerGetHazardSystemPoints(lua_State* L) {
 	// player:getHazardSystemPoints()
-	const auto player = getUserdataShared<Player>(L, 1);
+	const auto &player = getUserdataShared<Player>(L, 1);
 	if (!player) {
 		pushBoolean(L, false);
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
@@ -3872,7 +3872,7 @@ int PlayerFunctions::luaPlayerGetLoyaltyBonus(lua_State* L) {
 
 int PlayerFunctions::luaPlayerGetLoyaltyPoints(lua_State* L) {
 	// player:getLoyaltyPoints()
-	const auto player = getUserdataShared<Player>(L, 1);
+	const auto &player = getUserdataShared<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
