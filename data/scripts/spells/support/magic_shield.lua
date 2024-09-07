@@ -4,15 +4,26 @@ combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
 
 local spell = Spell("instant")
 
+local function calculateMagicShieldCapacity(player, Level, MagicLevel)
+	local grade = player:upgradeSpellsWOD("Magic Shield")
+	if grade >= WHEEL_GRADE_REGULAR then
+		local base = 8 * MagicLevel + 8.6 * Level
+	else
+		local base = 7 * MagicLevel + 7.6 * Level
+	end
+	local base = 7 * MagicLevel + 7.6 * Level
+	local bonus = math.max(300, 0.4 * Level)
+	local MagicShieldCapacity = base + bonus
+	print(MagicShieldCapacity)
+	return MagicShieldCapacity
+end
+
 function spell.onCastSpell(creature, var)
 	local condition = Condition(CONDITION_MANASHIELD)
 	condition:setParameter(CONDITION_PARAM_TICKS, 180000)
 	local player = creature:getPlayer()
 	local grade = player:upgradeSpellsWOD("Magic Shield")
-	local shield = 300 + 7.6 * player:getLevel() + 7 * player:getMagicLevel()
-	if grade >= WHEEL_GRADE_REGULAR then
-		shield = shield * 1.25
-	end
+	local shield = calculateMagicShieldCapacity(player, player:getLevel(), player:getMagicLevel())
 	if player then
 		condition:setParameter(CONDITION_PARAM_MANASHIELD, math.min(player:getMaxMana(), shield))
 	end
