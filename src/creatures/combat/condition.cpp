@@ -242,6 +242,8 @@ std::shared_ptr<Condition> Condition::createCondition(ConditionId_t id, Conditio
 		case CONDITION_YELLTICKS:
 		case CONDITION_PACIFIED:
 			return std::make_shared<ConditionGeneric>(id, type, ticks, buff, subId);
+		case CONDITION_GOSHNARTAINT:
+			return std::make_shared<ConditionGeneric>(id, type, ticks, buff, subId);
 
 		default:
 			return nullptr;
@@ -322,7 +324,14 @@ bool Condition::isRemovableOnDeath() const {
 		return false;
 	}
 
-	if (conditionType == CONDITION_SPELLCOOLDOWN || conditionType == CONDITION_SPELLGROUPCOOLDOWN || conditionType == CONDITION_MUTED) {
+	static const std::unordered_set<ConditionType_t> nonRemovableConditions = {
+		CONDITION_SPELLCOOLDOWN,
+		CONDITION_SPELLGROUPCOOLDOWN,
+		CONDITION_MUTED,
+		CONDITION_GOSHNARTAINT
+	};
+
+	if (nonRemovableConditions.find(conditionType) != nonRemovableConditions.end()) {
 		return false;
 	}
 
@@ -390,7 +399,26 @@ uint32_t ConditionGeneric::getIcons() const {
 		case CONDITION_ROOTED:
 			icons |= ICON_ROOTED;
 			break;
-
+		case CONDITION_GOSHNARTAINT:
+			switch (subId) {
+				case 1:
+					icons = ICON_GOSHNARTAINT_1;
+					break;
+				case 2:
+					icons = ICON_GOSHNARTAINT_2;
+					break;
+				case 3:
+					icons = ICON_GOSHNARTAINT_3;
+					break;
+				case 4:
+					icons = ICON_GOSHNARTAINT_4;
+					break;
+				case 5:
+					icons = ICON_GOSHNARTAINT_5;
+					break;
+				default:
+					break;
+			}
 		default:
 			break;
 	}
@@ -1167,7 +1195,11 @@ bool ConditionRegeneration::executeCondition(std::shared_ptr<Creature> creature,
 	auto player = creature->getPlayer();
 	int32_t dailyStreak = 0;
 	if (player) {
-		dailyStreak = static_cast<int32_t>(player->kv()->scoped("daily-reward")->get("streak")->getNumber());
+		auto scopedDailyReward = player->kv()->scoped("daily-reward")->get("streak");
+		if (!scopedDailyReward || !scopedDailyReward.has_value()) {
+			return false;
+		}
+		dailyStreak = static_cast<int32_t>(scopedDailyReward->getNumber());
 	}
 	if (creature->getZoneType() != ZONE_PROTECTION || dailyStreak >= DAILY_REWARD_HP_REGENERATION) {
 		if (internalHealthTicks >= getHealthTicks(creature)) {
