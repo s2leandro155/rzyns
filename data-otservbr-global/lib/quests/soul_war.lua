@@ -30,14 +30,14 @@ SoulWarQuest = {
 
 	timeToReturnImmuneMegalomania = 70, -- In seconds
 
-	baseBagYouDesireChance = 1, -- 1% base chance
+	baseBagYouDesireChance = 500, -- 1000 = 1% chance, 500 = 0.5% chance
 	bagYouDesireChancePerTaint = 1, -- Increases 1% per taint
 	bagYouDesireMonsters = {
 		"Bony Sea Devil",
 		"Brachiodemon",
 		"Branchy Crawler",
 		"Capricious Phantom",
-		"Cloak Of Terror",
+		"Cloak of Terror",
 		"Courage Leech",
 		"Distorted Phantom",
 		"Druid's Apparition",
@@ -1092,7 +1092,7 @@ function Monster:generateBagYouDesireLoot(player)
 
 	logger.trace("Player {} killed {} with {} taints, loot chance {}", player:getName(), monsterName, playerTaintLevel, totalChance)
 
-	if math.random(1, 100) <= totalChance then
+	if math.random(1, 100000) <= totalChance then
 		local itemType = ItemType(SoulWarQuest.bagYouDesireItemId)
 		if itemType then
 			loot[itemType:getId()] = { count = 1 }
