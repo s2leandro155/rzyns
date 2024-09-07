@@ -35,6 +35,7 @@
 #include "game/bank/bank.hpp"
 #include "enums/object_category.hpp"
 #include "enums/player_cyclopedia.hpp"
+#include "enums/player_icons.hpp"
 #include "creatures/players/cyclopedia/player_badge.hpp"
 #include "creatures/players/cyclopedia/player_cyclopedia.hpp"
 #include "creatures/players/cyclopedia/player_title.hpp"
@@ -310,7 +311,7 @@ public:
 		return inbox;
 	}
 
-	uint32_t getClientIcons();
+	std::unordered_set<PlayerIcon> getClientIcons();
 
 	const GuildWarVector &getGuildWarVector() const {
 		return guildWarVector;
@@ -1416,11 +1417,8 @@ public:
 		}
 	}
 	void sendClosePrivate(uint16_t channelId);
-	void sendIcons() {
-		if (client) {
-			client->sendIcons(getClientIcons());
-		}
-	}
+	void sendIcons();
+	void sendIconBakragore(const IconBakragore icon);
 	void sendClientCheck() const {
 		if (client) {
 			client->sendClientCheck();
@@ -1724,6 +1722,12 @@ public:
 	void sendOpenStash(bool isNpc = false) {
 		if (client && ((getLastDepotId() != -1) || isNpc)) {
 			client->sendOpenStash();
+		}
+	}
+
+	void sendTakeScreenshot(Screenshot_t screenshotType) {
+		if (client) {
+			client->sendTakeScreenshot(screenshotType);
 		}
 	}
 
@@ -2655,7 +2659,7 @@ private:
 	static uint32_t playerFirstID;
 	static uint32_t playerLastID;
 
-	std::forward_list<std::shared_ptr<Condition>> getMuteConditions() const;
+	std::vector<std::shared_ptr<Condition>> getMuteConditions() const;
 
 	void checkTradeState(std::shared_ptr<Item> item);
 	bool hasCapacity(std::shared_ptr<Item> item, uint32_t count) const;
@@ -2751,11 +2755,11 @@ private:
 
 	GuildWarVector guildWarVector;
 
-	std::forward_list<std::shared_ptr<Party>> invitePartyList;
-	std::forward_list<uint32_t> modalWindows;
-	std::forward_list<std::string> learnedInstantSpellList;
+	std::vector<std::shared_ptr<Party>> invitePartyList;
+	std::vector<uint32_t> modalWindows;
+	std::vector<std::string> learnedInstantSpellList;
 	// TODO: This variable is only temporarily used when logging in, get rid of it somehow.
-	std::forward_list<std::shared_ptr<Condition>> storedConditionList;
+	std::vector<std::shared_ptr<Condition>> storedConditionList;
 
 	std::unordered_set<std::shared_ptr<MonsterType>> m_bestiaryMonsterTracker;
 	std::unordered_set<std::shared_ptr<MonsterType>> m_bosstiaryMonsterTracker;
