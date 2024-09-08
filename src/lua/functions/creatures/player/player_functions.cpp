@@ -3112,7 +3112,7 @@ int PlayerFunctions::luaPlayerGetInstantSpells(lua_State* L) {
 	std::vector<std::shared_ptr<InstantSpell>> spells;
 	for (auto &[key, spell] : g_spells().getInstantSpells()) {
 		if (spell->canCast(player)) {
-			spells.push_back(spell);
+			spells.emplace_back(spell);
 		}
 	}
 
