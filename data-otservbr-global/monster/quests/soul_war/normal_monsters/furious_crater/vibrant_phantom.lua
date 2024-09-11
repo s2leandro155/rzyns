@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/vibrant_phantom.lua
+========
 local mType = Game.createMonsterType("Vibrant Phantom")
 local monster = {}
 
@@ -98,6 +100,7 @@ monster.loot = {
 	{ name = "violet crystal shard", chance = 1080 },
 	{ id = 23529, chance = 1080 }, -- ring of blue plasma
 	{ name = "green gem", chance = 1080 },
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -136,3 +139,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/furious_crater/vibrant_phantom.lua

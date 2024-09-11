@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/infernal_phantom.lua
+========
 local mType = Game.createMonsterType("Infernal Phantom")
 local monster = {}
 
@@ -99,6 +101,7 @@ monster.loot = {
 	{ name = "crystal mace", chance = 1610 },
 	{ name = "war axe", chance = 1410 },
 	{ name = "warrior's axe", chance = 1410 },
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -137,3 +140,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/infernal_phantom.lua

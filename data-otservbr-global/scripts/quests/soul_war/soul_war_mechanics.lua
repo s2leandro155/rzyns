@@ -552,13 +552,6 @@ end
 goshnarsHatredAccess:position(SoulWarQuest.goshnarsHatredAccessPosition.from)
 goshnarsHatredAccess:register()
 
-local burningHatredMonsters = {
-	"Ashes of Burning Hatred",
-	"Spark of Burning Hatred",
-	"Flame of Burning Hatred",
-	"Blaze of Burning Hatred",
-}
-
 local goshnarsHatredSorrow = Action()
 
 function goshnarsHatredSorrow.onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -566,7 +559,7 @@ function goshnarsHatredSorrow.onUse(player, item, fromPosition, target, toPositi
 		return
 	end
 
-	if not table.contains(burningHatredMonsters, target:getName()) then
+	if not table.contains(SoulWarQuest.burningHatredMonsters, target:getName()) then
 		logger.error("Player {} tried to use the item on a non-burning hatred monster.", player:getName())
 		return
 	end
@@ -610,7 +603,7 @@ function burningChangeForm.onThink(creature)
 				local boss = Creature("Goshnar's Hatred")
 				if boss then
 					logger.debug("Increasing hatred damage multiplier.")
-					boss:increaseHatredDamageMultiplier()
+					boss:increaseHatredDamageMultiplier(10)
 				end
 				logger.debug("Beginning of the burning transformation cycle.")
 			end
@@ -880,6 +873,11 @@ function greedyMaw.onUse(player, item, fromPosition, target, toPosition, isHotke
 				goshnarsCruelty:addDefense(-SoulWarQuest.goshnarsCrueltyDefenseChange)
 				logger.debug("Greedy Maw used on Goshnar's Cruelty, new defense {}", goshnarsCruelty:getDefense())
 			end
+
+			local defenseDrainValue = SoulWarQuest.kvSoulWar:get("goshnars-cruelty-defense-drain") or 0
+			if defenseDrainValue > 0 then
+				SoulWarQuest.kvSoulWar:set("goshnars-cruelty-defense-drain", defenseDrainValue - 1)
+			end
 		end
 		return true
 	end
@@ -924,11 +922,10 @@ local madnessReduce = MoveEvent()
 function madnessReduce.onStepIn(creature, item, position, fromPosition)
 	local player = creature:getPlayer()
 	item:getPosition():sendMagicEffect(CONST_ME_HOLYAREA)
-
+	item:remove()
 	if player and player:getGoshnarSymbolTormentCounter() > 0 then
 		player:resetGoshnarSymbolTormentCounter()
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The ooze calms your dread but leaves you vulnerable to phantasmal attacks!")
-		item:remove()
 		return true
 	end
 
@@ -967,7 +964,7 @@ function cleansedSanity.onUse(player, item, fromPosition, target, toPosition, is
 		SoulWarQuest.kvSoulWar:set("cleansed-sanity-action", currentTime + timeToIncreaseDefense)
 		target:getPosition():sendMagicEffect(CONST_ME_DRAWBLOOD)
 		item:remove()
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Use the item again within " .. timeToIncreaseDefense .. " seconds, or the monster's defense will increase by 2 every " .. timeToIncreaseDefense .. " seconds.")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Use the item again within " .. timeToIncreaseDefense .. " seconds, or the monster's defense will increase every " .. timeToIncreaseDefense .. " seconds.")
 		local boss = Creature("Goshnar's Megalomania")
 		if boss then
 			local mtype = boss:getType()
@@ -1066,3 +1063,19 @@ for _, pos in pairs(teleportPositions) do
 end
 
 teleportStepRemoveIcon:register()
+
+local goshnarsCrueltyBuff = CreatureEvent("GoshnarsCrueltyBuff")
+
+function goshnarsCrueltyBuff.onHealthChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
+	if creature and creature:isMonster() and attacker:isPlayer() and creature:getName() == "Goshnar's Cruelty" then
+		local newValue = SoulWarQuest.kvSoulWar:get("goshnars-cruelty-defense-drain") or SoulWarQuest.goshnarsCrueltyDefenseChange
+		if newValue ~= 0 then
+			local multiplier = math.max(0, 1 - (newValue / 100))
+			return primaryDamage * multiplier, primaryType, secondaryDamage * multiplier, secondaryType
+		end
+	end
+
+	return primaryDamage, primaryType, secondaryDamage, secondaryType
+end
+
+goshnarsCrueltyBuff:register()

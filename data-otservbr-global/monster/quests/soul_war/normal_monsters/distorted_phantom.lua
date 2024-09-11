@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/distorted_phantom.lua
+========
 local mType = Game.createMonsterType("Distorted Phantom")
 local monster = {}
 
@@ -96,6 +98,7 @@ monster.loot = {
 	{ name = "spellbook of warding", chance = 2890 },
 	{ id = 23531, chance = 1930 }, -- ring of green plasma
 	{ name = "glacial rod", chance = 1290 },
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -135,3 +138,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/distorted_phantom.lua

@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/capricious_phantom.lua
+========
 local mType = Game.createMonsterType("Capricious Phantom")
 local monster = {}
 
@@ -97,6 +99,7 @@ monster.loot = {
 	{ id = 23542, chance = 1180 }, -- collar of blue plasma
 	{ name = "glacial rod", chance = 940 },
 	{ name = "ornate crossbow", chance = 940 },
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -135,3 +138,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/capricious_phantom.lua

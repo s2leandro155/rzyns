@@ -4433,3 +4433,16 @@ int PlayerFunctions::luaPlayerSendCreatureAppear(lua_State* L) {
 	pushBoolean(L, true);
 	return 1;
 }
+
+int PlayerFunctions::luaPlayerSendCreatureAppear(lua_State* L) {
+	auto player = getUserdataShared<Player>(L, 1);
+	if (!player) {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		return 1;
+	}
+
+	bool isLogin = getBoolean(L, 2, false);
+	player->sendCreatureAppear(player, player->getPosition(), isLogin);
+	pushBoolean(L, true);
+	return 1;
+}

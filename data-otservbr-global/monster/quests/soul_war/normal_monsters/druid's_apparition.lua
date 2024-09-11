@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/druid's_apparition.lua
+========
 local mType = Game.createMonsterType("Druid's Apparition")
 local monster = {}
 
@@ -94,6 +96,7 @@ monster.loot = {
 	{ name = "platinum amulet", chance = 1750 },
 	{ name = "glacier robe", chance = 880 },
 	{ id = 23544, chance = 440 }, -- collar of red plasma
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -132,3 +135,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/druid's_apparition.lua

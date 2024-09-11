@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/mould_phantom.lua
+========
 local mType = Game.createMonsterType("Mould Phantom")
 local monster = {}
 
@@ -97,6 +99,7 @@ monster.loot = {
 	{ id = 23529, chance = 1040 }, -- ring of blue plasma
 	{ name = "ornate crossbow", chance = 840 },
 	{ name = "crystal crossbow", chance = 620 },
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -135,3 +138,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/mould_phantom.lua

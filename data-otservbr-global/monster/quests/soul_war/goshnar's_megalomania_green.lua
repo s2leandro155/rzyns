@@ -99,6 +99,7 @@ monster.loot = {
 	{ name = "figurine of megalomania", chance = 400 },
 	{ name = "megalomania's skull", chance = 400 },
 	{ name = "megalomania's essence", chance = 400 },
+	{ name = "bag you desire", chance = 100 },
 }
 
 monster.attacks = {
@@ -153,6 +154,10 @@ mType.onThink = function(monsterCallback, interval)
 	monsterCallback:onThinkGoshnarTormentCounter(interval, 36, intervalBetweenExecutions, SoulWarQuest.levers.goshnarsMegalomania.boss.position)
 	monsterCallback:onThinkMegalomaniaWhiteTiles(interval, zonePositions, 8000)
 	monsterCallback:goshnarsDefenseIncrease("cleansed-sanity-action")
+end
+
+mType.onDisappear = function(monster, creature)
+	creature:removeGoshnarsMegalomaniaMonsters(zone)
 end
 
 mType:register(monster)

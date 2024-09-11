@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/quests/soul_war/goshnars_megalomania.lua
+========
 local mType = Game.createMonsterType("Goshnar's Megalomania Blue")
 local monster = {}
 
@@ -94,6 +96,7 @@ monster.loot = {
 	{ name = "figurine of megalomania", chance = 400 },
 	{ name = "megalomania's skull", chance = 400 },
 	{ name = "megalomania's essence", chance = 400 },
+	{ name = "bag you desire", chance = 100 },
 }
 
 monster.attacks = {
@@ -144,4 +147,9 @@ mType.onThink = function(monsterCallback, interval)
 	monsterCallback:goshnarsDefenseIncrease("cleansed-sanity-action")
 end
 
+mType.onDisappear = function(monster, creature)
+	creature:removeGoshnarsMegalomaniaMonsters(zone)
+end
+
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/goshnar's_megalomania_blue.lua

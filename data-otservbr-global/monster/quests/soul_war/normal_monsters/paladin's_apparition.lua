@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/paladin's_apparition.lua
+========
 local mType = Game.createMonsterType("Paladin's Apparition")
 local monster = {}
 
@@ -95,6 +97,7 @@ monster.loot = {
 	{ name = "stone skin amulet", chance = 1560 },
 	{ id = 23542, chance = 1250 }, -- collar of blue plasma
 	{ id = 23529, chance = 1250 }, -- ring of blue plasma
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -133,3 +136,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/paladin's_apparition.lua

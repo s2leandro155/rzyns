@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/knight's_apparition.lua
+========
 local mType = Game.createMonsterType("Knight's Apparition")
 local monster = {}
 
@@ -92,6 +94,7 @@ monster.loot = {
 	{ name = "giant sword", chance = 1720 },
 	{ name = "stone skin amulet", chance = 1500 },
 	{ name = "crown shield", chance = 640 },
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -130,3 +133,4 @@ monster.immunities = {
 }
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/knight's_apparition.lua

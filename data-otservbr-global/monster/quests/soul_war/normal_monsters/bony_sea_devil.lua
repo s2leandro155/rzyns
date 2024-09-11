@@ -1,3 +1,5 @@
+<<<<<<<< HEAD:data-otservbr-global/monster/undeads/bony_sea_devil.lua
+========
 local mType = Game.createMonsterType("Bony Sea Devil")
 local monster = {}
 
@@ -100,6 +102,7 @@ monster.loot = {
 	{ name = "goblet of gloom", chance = 880 },
 	{ name = "glacier kilt", chance = 880 },
 	{ name = "glacial rod", chance = 1210 },
+	{ name = "bag you desire", chance = 15 },
 }
 
 monster.attacks = {
@@ -144,3 +147,4 @@ mType.onThink = function(monster, interval)
 end
 
 mType:register(monster)
+>>>>>>>> 5bcbc39e5 (feat: full soul war quest (#2535)):data-otservbr-global/monster/quests/soul_war/normal_monsters/bony_sea_devil.lua
